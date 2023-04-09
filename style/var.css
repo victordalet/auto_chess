@@ -1,0 +1,17 @@
+:root {
+    --color-black : #000611;
+    --color-white : #FBFBFC;
+    --color-green : #087C47;
+    --color-beige : #DED9B0;
+    --color-background : #3A3932;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background: var(--color-background);
+}
+

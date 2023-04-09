@@ -1,0 +1,46 @@
+.tray {
+    width: 50vh;
+    height: 50vh;
+    display: grid;
+    position: absolute;
+    top: 20vh;
+    left: calc(50vw - 25vh);
+    grid-template-columns: repeat(8, 1fr);
+    box-shadow: 0 0 50px #222;
+}
+
+.tray .cells {
+    width: calc(50vh / 8);
+    height: calc(50vh /8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-green);
+}
+
+.tray .cells:nth-child(16n - 6),
+.tray .cells:nth-child(16n - 4),
+.tray .cells:nth-child(16n - 2),
+.tray .cells:nth-child(16n),
+.tray .cells:nth-child(16n - 9),
+.tray .cells:nth-child(16n - 11),
+.tray .cells:nth-child(16n - 13),
+.tray .cells:nth-child(16n - 15){
+    background: var(--color-beige);
+}
+
+i {
+    font-size: 24px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+i:hover {
+    transform: scale(1.5);
+}
+
+@media screen and (max-width: calc(100vh - 100vw)) {
+    .tray {
+        transform: scale(.8);
+    }
+}
