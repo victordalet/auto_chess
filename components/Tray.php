@@ -36,6 +36,10 @@ class Tray {
 
 
     }
+        
+    function get_map() {
+        return $this->map;
+    }
 
     function display_block() {
         echo <<<EOF

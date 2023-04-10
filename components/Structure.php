@@ -12,7 +12,7 @@ class Structure {
         echo <<<EOF
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset='utf-8'>
         <meta name='Author' CONTENT='Victor Dalet'>
