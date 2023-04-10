@@ -43,7 +43,11 @@ class Tray {
 EOF;
         for ($i = 0 ; $i < 64 ; $i++) {
             echo <<<EOF
-<div class="cells"></div>
+<div class="cells">
+EOF;
+            $this->display_icon($i);
+            echo <<<EOF
+</div>
 EOF;
         }
         echo <<<EOF
@@ -51,20 +55,20 @@ EOF;
 EOF;
     }
 
-    function display_icon() {
-        for ($i = 0 ; $i < count($this->map) ; $i++) {
-            for ($j=0 ; $j < count($this->map) ; $j++) {
-                if ($this->map[$i][$j] != 0) {
-                    if ($this->map[$i][$j] < 0) {
-                        echo $this->icon2[-($this->map[$i][$j]) - 1];
-                    }
-                    else {
-                        echo $this->icon[$this->map[$i][$j] - 1];
-                    }
-                }
+    function display_icon($nb) {
+        $i = intval($nb /8);
+        $j = $nb - ($i * 8);
+        if ($this->map[$i][$j] != 0) {
+            if ($this->map[$i][$j] < 0) {
+                echo $this->icon2[-($this->map[$i][$j]) - 1];
+            }
+            else {
+                echo $this->icon[$this->map[$i][$j] - 1];
             }
         }
     }
+
+
 
 
 

@@ -16,7 +16,6 @@ $tray = new Tray();
 
 $struct->head();
 $tray->display_block();
-$tray->display_icon();
 $struct->footer();
 
 
