@@ -3,9 +3,11 @@
 class Structure {
 
     private $title;
+    private $date;
 
     function __construct($title) {
         $this->title = $title;
+        $this->date = Date('Y');
     }
 
     function head() {
@@ -31,7 +33,7 @@ EOF;
         echo <<<EOF
     </body>
     <footer>
-    
+        <p>$this->title | $this->date | <a target="_blank" href="https://victordalet.lescigales.org/">DALET Victor</a></p>
     </footer>
 </html>
 EOF;

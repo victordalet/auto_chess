@@ -9,11 +9,14 @@ class Possibility {
         $this->all_map = [];
     }
 
-    function is_in_check() {
+    function is_in_check($map) {
+
+        /* King position */
+
         $row = $col = -1;
         for ($i = 0; $i < 8; $i++) {
             for ($j = 0; $j < 8; $j++) {
-                if ($this->map[$i][$j] == 5) {
+                if ($map[$i][$j] == 6) {
                     $row = $i;
                     $col = $j;
                     break 2;
@@ -21,14 +24,27 @@ class Possibility {
             }
         }
 
+        /* Col */
+
         for ($i = 0; $i < 8; $i++) {
-            if ($this->map[$row][$i] != 0 && $this->map[$row][$i] != 5) {
-                return true;
-            }
-            if ($this->map[$i][$col] != 0 && $this->map[$i][$col] != 5) {
-                return true;
+            if ($map[$row][$i] != 0) {
+                if ($map[$row][$i] < 0) {
+                    return true;
+                }
+                break;
             }
         }
+
+        for ($i = 0; $i < 8; $i++) {
+            if ($map[$i][$col] != 0) {
+                if ($map[$i][$col] < 0) {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        /* Diag */
 
         $diagonals = [
             [$row-1, $col-1], [$row-1, $col+1],
@@ -38,8 +54,8 @@ class Possibility {
             $i = $diag[0];
             $j = $diag[1];
             while ($i >= 0 && $i < 8 && $j >= 0 && $j < 8) {
-                if ($this->map[$i][$j] != 0) {
-                    if ($this->map[$i][$j] == 5) {
+                if ($map[$i][$j] != 0) {
+                    if ($map[$i][$j] < 0) {
                         return true;
                     } else {
                         break;
@@ -47,6 +63,22 @@ class Possibility {
                 }
                 $i += $diag[0] - $row;
                 $j += $diag[1] - $col;
+            }
+        }
+
+        /* Knight */
+
+        $knight_moves = [
+            [$row-2, $col-1], [$row-2, $col+1],
+            [$row-1, $col-2], [$row-1, $col+2],
+            [$row+1, $col-2], [$row+1, $col+2],
+            [$row+2, $col-1], [$row+2, $col+1]
+        ];
+        foreach ($knight_moves as $move) {
+            $i = $move[0];
+            $j = $move[1];
+            if ($i >= 0 && $i < 8 && $j >= 0 && $j < 8 && $map[$i][$j] === -3) {
+                return true;
             }
         }
 
@@ -63,11 +95,25 @@ class Possibility {
                     $temp[$i][$j] = 0;
                     /* MOVEMENT */
                     if ($this->map[$i + $k][$j + $k] === 0) {
-                        $this->all_map[] = $temp;
+                        if (!$this->is_in_check($this->map)) {
+                            $this->all_map[] = $temp;
+                        }
+                        else {
+                            if (!$this->is_in_check($temp)) {
+                                $this->all_map[] = $temp;
+                            }
+                        }
                     }
                     /* ATTACK */
                     else if ($this->map[$i + $k][$j + $k] < 0) {
-                        $this->all_map[] = $temp;
+                        if (!$this->is_in_check($this->map)) {
+                            $this->all_map[] = $temp;
+                        }
+                        else {
+                            if (!$this->is_in_check($temp)) {
+                                $this->all_map[] = $temp;
+                            }
+                        }
                         break;
                     }
                     /* US */
@@ -80,6 +126,7 @@ class Possibility {
     }
 
     function get_possibility_for_ia() {
+        echo $this->is_in_check($this->map);
         for ($i = 0 ; $i < count($this->map) ; $i++) {
             for ($j = 0 ; $j < count($this->map[$i]) ; $j++) {
                 switch ($this->map[$i][$j]) {
@@ -91,20 +138,41 @@ class Possibility {
                                 $temp = $this->map;
                                 $temp[$i+1][$j] = 5;
                                 $temp[$i][$j] = 0;
-                                $this->all_map[] = $temp;
+                                if (!$this->is_in_check($this->map)) {
+                                    $this->all_map[] = $temp;
+                                }
+                                else {
+                                    if (!$this->is_in_check($temp)) {
+                                        $this->all_map[] = $temp;
+                                    }
+                                }
                             }
                             /* PAWN NOIRE MOVE ONE */
                             $temp = $this->map;
                             $temp[$i+1][$j] = 1;
                             $temp[$i][$j] = 0;
-                            $this->all_map[] = $temp;
+                            if (!$this->is_in_check($this->map)) {
+                                $this->all_map[] = $temp;
+                            }
+                            else {
+                                if (!$this->is_in_check($temp)) {
+                                    $this->all_map[] = $temp;
+                                }
+                            }
                             if ($i === 1) {
                                 /* PAWN NOIRE MOVE TWO */
                                 if ($this->map[$i+2][$j] === 0) {
                                     $temp = $this->map;
                                     $temp[$i + 2][$j] = 1;
                                     $temp[$i][$j] = 0;
-                                    $this->all_map[] = $temp;
+                                    if (!$this->is_in_check($this->map)) {
+                                        $this->all_map[] = $temp;
+                                    }
+                                    else {
+                                        if (!$this->is_in_check($temp)) {
+                                            $this->all_map[] = $temp;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -114,14 +182,28 @@ class Possibility {
                             $temp = $this->map;
                             $temp[$i+1][$j+1] = 1;
                             $temp[$i][$j] = 0;
-                            $this->all_map[] = $temp;
+                            if (!$this->is_in_check($this->map)) {
+                                $this->all_map[] = $temp;
+                            }
+                            else {
+                                if (!$this->is_in_check($temp)) {
+                                    $this->all_map[] = $temp;
+                                }
+                            }
                         }
                         if ($this->map[$i+1][$j-1] < 0) {
                             /* PAWN ATTACK 2 */
                             $temp = $this->map;
                             $temp[$i+1][$j-1] = 1;
                             $temp[$i][$j] = 0;
-                            $this->all_map[] = $temp;
+                            if (!$this->is_in_check($this->map)) {
+                                $this->all_map[] = $temp;
+                            }
+                            else {
+                                if (!$this->is_in_check($temp)) {
+                                    $this->all_map[] = $temp;
+                                }
+                            }
                         }
                         break;
                     case 2 :
@@ -146,7 +228,14 @@ class Possibility {
                                 $temp = $this->map;
                                 $temp[$lst_pos[$k][0]][$lst_pos[$k][1]] = 3;
                                 $temp[$i][$j] = 0;
-                                $this->all_map[] = $temp;
+                                if (!$this->is_in_check($this->map)) {
+                                    $this->all_map[] = $temp;
+                                }
+                                else {
+                                    if (!$this->is_in_check($temp)) {
+                                        $this->all_map[] = $temp;
+                                    }
+                                }
                             }
                         }
                         break;
@@ -168,6 +257,7 @@ class Possibility {
                 }
             }
         }
+        /* IF count($this->>all_map) === 0 THEN CHECKMATE  */
         return $this->all_map;
     }
 }
