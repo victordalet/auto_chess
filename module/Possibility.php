@@ -9,19 +9,69 @@ class Possibility {
         $this->all_map = [];
     }
 
-    function simple_movement($lst_pos,$i,$j,$nb) {
+    function is_in_check() {
+        $row = $col = -1;
+        for ($i = 0; $i < 8; $i++) {
+            for ($j = 0; $j < 8; $j++) {
+                if ($this->map[$i][$j] == 5) {
+                    $row = $i;
+                    $col = $j;
+                    break 2;
+                }
+            }
+        }
+
+        for ($i = 0; $i < 8; $i++) {
+            if ($this->map[$row][$i] != 0 && $this->map[$row][$i] != 5) {
+                return true;
+            }
+            if ($this->map[$i][$col] != 0 && $this->map[$i][$col] != 5) {
+                return true;
+            }
+        }
+
+        $diagonals = [
+            [$row-1, $col-1], [$row-1, $col+1],
+            [$row+1, $col-1], [$row+1, $col+1]
+        ];
+        foreach ($diagonals as $diag) {
+            $i = $diag[0];
+            $j = $diag[1];
+            while ($i >= 0 && $i < 8 && $j >= 0 && $j < 8) {
+                if ($this->map[$i][$j] != 0) {
+                    if ($this->map[$i][$j] == 5) {
+                        return true;
+                    } else {
+                        break;
+                    }
+                }
+                $i += $diag[0] - $row;
+                $j += $diag[1] - $col;
+            }
+        }
+
+        return false;
+    }
+
+
+    function simple_movement($lst_pos,$i,$j,$nb,$nb_k) {
         for ($l = 0 ; $l < count($lst_pos) ; $l++) {
-            for ($k = 0; $k < 8; $k++) {
+            for ($k = 0; $k < $nb_k; $k++) {
                 if ($i + ($k * $lst_pos[$l][0] >= 0 && $j + ($k * $lst_pos[$l][1] ) >= 0) && $i + ($k * $lst_pos[$l][0] < 8 && $j + ($k * $lst_pos[$l][1] ) < 8)) {
                     $temp = $this->map;
                     $temp[$i + ($k * $lst_pos[$l][0])][$j + ($k * $lst_pos[$l][1])] = $nb;
                     $temp[$i][$j] = 0;
+                    /* MOVEMENT */
                     if ($this->map[$i + $k][$j + $k] === 0) {
                         $this->all_map[] = $temp;
-                    } else if ($this->map[$i + $k][$j + $k] < 0) {
+                    }
+                    /* ATTACK */
+                    else if ($this->map[$i + $k][$j + $k] < 0) {
                         $this->all_map[] = $temp;
                         break;
-                    } else {
+                    }
+                    /* US */
+                    else {
                         break;
                     }
                 }
@@ -77,7 +127,7 @@ class Possibility {
                     case 2 :
                         /* TOWER */
                         $lst_pos = [[1,0],[-1,0],[0,1],[-1,0]];
-                        $this->simple_movement($lst_pos,$i,$j,2);
+                        $this->simple_movement($lst_pos,$i,$j,2,8);
                         break;
                     case 3 :
                         /* KNIGHT */
@@ -103,14 +153,18 @@ class Possibility {
                     case 4 :
                         /* Bishop */
                         $lst_pos = [[1,1],[-1,1],[-1,-1],[1,-1]];
-                        $this->simple_movement($lst_pos,$i,$j,4);
+                        $this->simple_movement($lst_pos,$i,$j,4,8);
                         break;
                     case 5:
                         /* Queen */
                         $lst_pos = [[1,1],[-1,1],[-1,-1],[1,-1],[1,0],[-1,0],[0,1],[-1,0]];
-                        $this->simple_movement($lst_pos,$i,$j,5);
+                        $this->simple_movement($lst_pos,$i,$j,5,8);
                         break;
-                    
+                    case 6 :
+                        /* King */
+                        $lst_pos = [[1,1],[-1,1],[-1,-1],[1,-1],[1,0],[-1,0],[0,1],[-1,0]];
+                        $this->simple_movement($lst_pos,$i,$j,6,1);
+                        break;
                 }
             }
         }
