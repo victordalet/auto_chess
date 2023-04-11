@@ -35,6 +35,7 @@ EOF;
     <footer>
         <p>$this->title | $this->date | <a target="_blank" href="https://victordalet.lescigales.org/">DALET Victor</a></p>
     </footer>
+    <script src="../script.js"></script>
 </html>
 EOF;
     }

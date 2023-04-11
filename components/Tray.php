@@ -27,12 +27,12 @@ class Tray {
             '<i class="fa-solid fa-chess-queen"></i>',
             '<i class="fa-solid fa-chess-king"></i>'];
 
-        $this->icon2 = ['<i class="fa-solid fa-chess-pawn" style="color: #FBFBFC"></i>',
-            '<i class="fa-solid fa-chess-rook" style="color: #FBFBFC"></i>',
-            '<i class="fa-solid fa-chess-knight" style="color: #FBFBFC"></i>',
-            '<i class="fa-solid fa-chess-bishop" style="color: #FBFBFC"></i>',
-            '<i class="fa-solid fa-chess-queen" style="color: #FBFBFC"></i>',
-            '<i class="fa-solid fa-chess-king" style="color: #FBFBFC"></i>'];
+        $this->icon2 = ['<i class="fa-solid fa-chess-pawn" onclick="get_possibility(1)" style="color: #FBFBFC"></i>',
+            '<i class="fa-solid fa-chess-rook" onclick="get_possibility(2)" style="color: #FBFBFC"></i>',
+            '<i class="fa-solid fa-chess-knight" onclick="get_possibility(3)" style="color: #FBFBFC"></i>',
+            '<i class="fa-solid fa-chess-bishop" onclick="get_possibility(4)" style="color: #FBFBFC"></i>',
+            '<i class="fa-solid fa-chess-queen" onclick="get_possibility(5)" style="color: #FBFBFC"></i>',
+            '<i class="fa-solid fa-chess-king" onclick="get_possibility(6)" style="color: #FBFBFC"></i>'];
 
 
     }
@@ -46,9 +46,7 @@ class Tray {
 <div class="tray">
 EOF;
         for ($i = 0 ; $i < 64 ; $i++) {
-            echo <<<EOF
-<div class="cells">
-EOF;
+            echo"<div class='cells'>";
             $this->display_icon($i);
             echo <<<EOF
 </div>
