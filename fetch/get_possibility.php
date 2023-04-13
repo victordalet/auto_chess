@@ -10,6 +10,8 @@ if (isset($_POST)) {
 }
 
 $piece = $json['pieces'];
+$i = $json['i'];
+$j = $json['j'];
 
 $p = new Possibility(
     array(
@@ -22,5 +24,5 @@ $p = new Possibility(
     [-1,-1,-1,-1,-1,-1,-1,-1],
     [-2,-3,-4,-5,-6,-4,-3,-2]
     ));
-echo $p->get_possibility_by_piece($piece);
+echo $p->get_possibility_by_piece($piece,$i,$j);
 

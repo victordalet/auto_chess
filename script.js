@@ -1,10 +1,12 @@
 
 
-function get_possibility(pieces) {
+function get_possibility(pieces,i,j) {
     fetch("fetch/get_possibility.php",{
         method : "POST",
         body : JSON.stringify({
-            pieces : pieces
+            pieces : pieces,
+            i : i,
+            j : j
         })
 
     })
