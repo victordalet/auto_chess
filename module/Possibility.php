@@ -175,7 +175,7 @@ class Possibility {
             case 1 :
                 /* PAWN */
                 if ($this->map[$i-1][$j] === 0) {
-                    /* PAWN NOIRE MOVE ONE */
+                     /* PAWN NOIRE MOVE ONE */
                     $temp = $this->map;
                     $temp[$i-1][$j] = 1;
                     $temp[$i][$j] = 0;
@@ -209,7 +209,7 @@ class Possibility {
                     }
                 }
 
-                if ($this->map[$i-1][$j-1] < 0) {
+                if ($this->map[$i-1][$j-1] > 0) {
                     /* PAWN ATTACK 1 */
                     $temp = $this->map;
                     $temp[$i-1][$j-1] = 1;
@@ -225,7 +225,7 @@ class Possibility {
                         }
                     }
                 }
-                if ($this->map[$i-1][$j+1] < 0) {
+                if ($this->map[$i-1][$j+1] > 0) {
                     /* PAWN ATTACK 2 */
                     $temp = $this->map;
                     $temp[$i-1][$j+1] = 1;
@@ -246,6 +246,37 @@ class Possibility {
                 /* TOWER */
                 $lst_pos = [[1,0],[-1,0],[0,1],[0,-1]];
                 $data .= $this->simple_movement_to_str($lst_pos,$i,$j,2,8);
+                break;
+            case 3 :
+                /* KNIGHT  */
+                $lst_pos = [
+                    [$i+1,$j+2],
+                    [$i+2,$j+1],
+                    [$i-1,$j-2],
+                    [$i-2,$j-1],
+                    [$i-1,$j+2],
+                    [$i-2,$j+1],
+                    [$i+1,$j-2],
+                    [$i+2,$j-1]
+                ];
+                for ($k = 0 ; $k < count($lst_pos) ; $k++) {
+                    if ($lst_pos[$k][0] >= 0 && $lst_pos[$k][0] < 8 && $lst_pos[$k][1] >= 0 && $lst_pos[$k][1] < 8 ) {
+                        if ($this->map[$lst_pos[$k][0]][$lst_pos[$k][1]] >= 0) {
+                            $temp = $this->map;
+                            $temp[$lst_pos[$k][0]][$lst_pos[$k][1]] = 3;
+                            $temp[$i][$j] = 0;
+                            if (!$this->is_in_check($this->map)) {
+                                $data .= 8 * $lst_pos[$k][0] + $lst_pos[$k][1];
+                                $data .= ",";
+                            } else {
+                                if (!$this->is_in_check($temp)) {
+                                    $data .= 8 * $lst_pos[$k][0] + $lst_pos[$k][1];
+                                    $data .= ",";
+                                }
+                            }
+                        }
+                    }
+                }
                 break;
             case 4 :
                 /* Bishop */

@@ -8,17 +8,24 @@ class Tray {
     private $icon2;
 
     function __construct() {
+        session_start();
 
-        $this->map = [
-            [2,3,4,5,6,4,3,2],
-            [1,1,1,1,1,1,1,1],
-            [0,0,0,0,0,-1,-1,0],
-            [0,0,0,0,-5,-1,0,0],
-            [0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,-5,0],
-            [-1,-1,-1,-1,-1,-1,-1,-1],
-            [-2,-3,-4,-5,-6,-4,-3,-2]
-        ];
+        if (!isset($_SESSION['map'])) {
+            $this->map = [
+                [ 2,  3,  4,  5,  6,  4,  3,  2],
+                [ 1,  1,  1,  1,  1,  1,  1,  1],
+                [ 0,  0,  0,  0,  0,  0,  0,  0],
+                [ 0,  0,  0,  0,  0,  0,  0,  0],
+                [ 0,  0,  0,  0,  0,  0,  0,  0],
+                [ 0,  0,  0,  0,  0,  0,  0,  0],
+                [-1, -1, -1, -1, -1, -1, -1, -1],
+                [-2, -3, -4, -5, -6, -4, -3, -2]
+            ];
+            $_SESSION['map']  = $this->map;
+        }
+        else {
+            $this->map = $_SESSION['map'];
+        }
 
         $this->icon = ['<i class="fa-solid fa-chess-pawn"></i>',
             '<i class="fa-solid fa-chess-rook"></i>',
@@ -46,7 +53,7 @@ class Tray {
 <div class="tray">
 EOF;
         for ($i = 0 ; $i < 64 ; $i++) {
-            echo"<div class='cells'>";
+            echo"<div class='cells' id='".$i."' onclick='go_to(".$i.")'>";
             $this->display_icon($i);
             echo <<<EOF
 </div>

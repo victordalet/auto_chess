@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 
 include "../module/Possibility.php";
 
@@ -13,16 +14,10 @@ $piece = $json['pieces'];
 $i = $json['i'];
 $j = $json['j'];
 
-$p = new Possibility(
-    array(
-    [2,3,4,5,6,4,3,2],
-    [1,1,1,1,1,1,1,1],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [-1,-1,-1,-1,-1,-1,-1,-1],
-    [-2,-3,-4,-5,-6,-4,-3,-2]
-    ));
+$_SESSION['i'] = $i;
+$_SESSION['j'] = $j;
+$_SESSION['selected'] = $piece;
+
+$p = new Possibility($_SESSION['map']);
 echo $p->get_possibility_by_piece($piece,$i,$j);
 
